@@ -39,6 +39,7 @@ jobs:
           az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_RESOURCE_LOCATION }}
           az storage account create --name ${{ env.AZURE_STORAGE_ACCOUNT }} --location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --sku Standard_LRS
           az functionapp create --name ${{ env.AZURE_FUNCTIONAPP }} --storage-account ${{ env.AZURE_STORAGE_ACCOUNT }} --consumption-plan-location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }}
+          az functionapp deployment slot create --name ${{ env.AZURE_FUNCTIONAPP }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --slot preprod
 
   build-and-deploy:
     runs-on: windows-latest
