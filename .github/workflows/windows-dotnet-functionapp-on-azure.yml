@@ -19,6 +19,27 @@ env:
   AZURE_FUNCTIONAPP: deep-functions-03-odata-azurefunction
 
 jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+            
+   # Authentication
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS  }}
+    
+  # Provision a new Web App
+    - name: Azure CLI script to create a new Function App
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az account show
+          az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_RESOURCE_LOCATION }}
+          az storage account create --name ${{ env.AZURE_STORAGE_ACCOUNT }} --location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --sku Standard_LRS
+          az functionapp create --name ${{ env.AZURE_FUNCTIONAPP }} --storage-account ${{ env.AZURE_STORAGE_ACCOUNT }} --consumption-plan-location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }}
+
   build-and-deploy:
     runs-on: windows-latest
     steps:
@@ -45,18 +66,7 @@ jobs:
         pushd .
         dotnet build --configuration Release --output ./output
         popd
-    
-    # Provision a new Web App
-    - name: Azure CLI script to create a new Function App
-      uses: azure/CLI@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az account show
-          az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_RESOURCE_LOCATION }}
-          az storage account create --name ${{ env.AZURE_STORAGE_ACCOUNT }} --location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --sku Standard_LRS
-          az functionapp create --name ${{ env.AZURE_FUNCTIONAPP }} --storage-account ${{ env.AZURE_STORAGE_ACCOUNT }} --consumption-plan-location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }}
-          
+               
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
