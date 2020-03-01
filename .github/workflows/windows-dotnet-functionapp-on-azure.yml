@@ -12,6 +12,12 @@ on:
     branches:
     - master
 
+env:
+  AZURE_RESOURCE_GROUP: deep-functions-rgrp   # set this to your Azure Resource group's name  
+  AZURE_RESOURCE_LOCATION: westindia   # set this to your application's name
+  AZURE_STORAGE_ACCOUNT: deepfunctions03odatazure  # set this to your App service plan's name
+  AZURE_FUNCTIONAPP: deep-functions-03-odata-azurefunction
+
 jobs:
   build-and-deploy:
     runs-on: windows-latest
@@ -39,12 +45,23 @@ jobs:
         pushd .
         dotnet build --configuration Release --output ./output
         popd
-
+    
+    # Provision a new Web App
+    - name: Azure CLI script to create a new Function App
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az account show
+          az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_RESOURCE_LOCATION }}
+          az storage account create --name ${{ env.AZURE_STORAGE_ACCOUNT }} --location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --sku Standard_LRS
+          az functionapp create --name ${{ env.AZURE_FUNCTIONAPP }} --storage-account ${{ env.AZURE_STORAGE_ACCOUNT }} --consumption-plan-location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }}
+          
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
       with:
-        app-name: deep-functions-03-odatazurefunction
+        app-name: ${{ env.AZURE_FUNCTIONAPP }}
         slot-name: preprod
         # If your function app project is not located in your repository's root
         # Please consider prefixing the project path in this package parameter
