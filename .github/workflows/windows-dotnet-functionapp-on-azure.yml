@@ -42,6 +42,7 @@ jobs:
           az functionapp deployment slot create --name ${{ env.AZURE_FUNCTIONAPP }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --slot preprod
 
   build-and-deploy:
+    needs: provision
     runs-on: windows-latest
     steps:
     - name: 'Checkout GitHub Action'
