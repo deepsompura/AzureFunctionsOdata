@@ -26,6 +26,7 @@ namespace My.Functions
                 new Product() { Title = "Mountain Bike eléctrica HAIBIKE SDURO HARD SEVEN", Category = "Mountain Bicycle" },
                 new Product() { Title = "Sillín BROOKS CAMBIUM C15 CARVED ALL WEATHER", Category = "Sillin" },
                 new Product() { Title = "Poncho VAUDE COVERO II Amarillo", Category = "Chaquetas" },
+                new Product() { Title = "Poncho VAUDE COVERO III Amarillo", Category = "Chaquetas" },
             };
 
             // We apply the OData query to the IQueryable <Product> to the previous data source
