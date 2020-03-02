@@ -15,7 +15,7 @@ on:
 env:
   AZURE_RESOURCE_GROUP: deep-functions-rgrp   # set this to your Azure Resource group's name  
   AZURE_RESOURCE_LOCATION: eastus2   # set this to your application's name
-  AZURE_STORAGE_ACCOUNT: deepfuncstg03odatazure  # set this to your App service plan's name
+  AZURE_STORAGE_ACCOUNT: deepfuncstg03odata # set this to your App service plan's name
   AZURE_FUNCTIONAPP: deep-functions-03-odata-azurefunction
 
 jobs:
