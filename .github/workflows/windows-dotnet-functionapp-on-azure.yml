@@ -38,7 +38,7 @@ jobs:
           az account show
           az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_RESOURCE_LOCATION }}
           az storage account create --name ${{ env.AZURE_STORAGE_ACCOUNT }} --location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --sku Standard_LRS
-          az functionapp create --name ${{ env.AZURE_FUNCTIONAPP }} --storage-account ${{ env.AZURE_STORAGE_ACCOUNT }} --consumption-plan-location ${{ env.AZURE_RESOURCE_LOCATION }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --functions-version 3 --plan EastUS2Plan
+          az functionapp create --name ${{ env.AZURE_FUNCTIONAPP }} --storage-account ${{ env.AZURE_STORAGE_ACCOUNT }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --functions-version 3 --plan EastUS2Plan
           az functionapp deployment slot create --name ${{ env.AZURE_FUNCTIONAPP }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --slot preprod --configuration-source  ${{ env.AZURE_FUNCTIONAPP }}
           az functionapp deployment slot auto-swap --slot preprod --auto-swap-slot production --name ${{ env.AZURE_FUNCTIONAPP }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }}
 
